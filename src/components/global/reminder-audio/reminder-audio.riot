@@ -1,0 +1,162 @@
+<reminder-audio>
+  <style>
+    .stop.button {
+      margin-top: 1rem;
+    }
+    .audio {
+      margin: 2rem 0;
+    }
+    .center {
+      text-align: center;
+    }
+    .full-date {
+      font-weight: bold;
+    }
+    ul {
+      list-style: none;
+    }
+    li input[type=text] {
+      width: 8.5rem;
+    }
+  </style>
+
+  <div>
+    <div class="row">
+      <h1>{state.date.toLocaleString()}</h1>
+    </div>
+
+    <!--
+    <div class="row">
+      <button onclick={togglePlayPause}>Toggle Play/Pause</button>
+    </div>
+    -->
+
+    <div class="row">
+      <img src="/assets/image/2021-04-16-retreat-schedule.jpg"></img>
+    </div>
+
+    <div class="audio row">
+      <audio controls class="column column-90">
+        <source src="assets/audio/bell.ogg" type="audio/ogg">
+        <source src="assets/audio/bell.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+      <button class="stop button button-clear column column-10" onclick={stopAudio}>Stop</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="column">
+      <p class="center full-date">{state.date}</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <button class="stop button button-clear column" 
+      onclick={() => update({bellTimeVisible: !state.bellTimeVisible})}>
+      {state.bellTimeVisible ? 'Hide Bell Time' : 'Show Bell Time'}
+    </button>
+  </div>
+
+  <div if={state.bellTimeVisible} class="row">
+    <div class="column center">
+      <h3>Bell Time</h3>
+      <ul>
+        <li>Custom</li>
+        <li>
+          <input type="text" value={state.customBellTime} autofocus
+            onkeyup={e => {
+              const customBellTime = e.target.value
+              window.localStorage.setItem('customBellTime', customBellTime)
+              this.update({customBellTime})
+            }}/>
+        </li>
+        <li each={s in state.schedule}>{s}</li>
+      </ul>
+    </div>
+  </div>
+ 
+  <script>
+
+    function inRange(date, schedule) {
+      const hh = date.getHours()
+      const mm = date.getMinutes()
+      const ss = date.getSeconds()
+
+      for (let s of schedule) {
+        if (!/:/.test(s))
+          continue
+        s = s.split(':')
+        if (s.length < 2) 
+          continue
+        if (s.length === 2)
+          s.push(0)
+        const s_hh = Number(s[0])
+        const s_mm = Number(s[1])
+        const s_ss = Number(s[2])
+        // console.log(s_hh, s_mm, s_ss, '', hh, mm, ss)
+        if (hh === s_hh && mm === s_mm && ss === s_ss) {
+          return true
+        }
+      }
+      return false
+    }
+
+    export default {
+      components: {
+      },
+      state: {
+        paused: false,
+        date: new Date(),
+        schedule: [
+          '09:00:00',
+          '10:00:00',
+          '13:00:00',
+          '14:00:00',
+          '15:00:00',
+          '16:00:00',
+          '17:00:00',
+          '18:00:00',
+        ],
+        bellTimeVisible: true,
+        customBellTime: window.localStorage.getItem('customBellTime'),
+      },
+      onMounted() {
+        const bellAudio = this.$('audio');
+        bellAudio.addEventListener("pause", () => {
+          // console.log('pause event', this)
+          // bellAudio.currentTime = 0
+        })
+        bellAudio.addEventListener("ended", () => {
+          console.log('ended event')
+          bellAudio.currentTime = 0
+        })
+        setInterval(() => {
+          const date = new Date();
+          this.update({date})
+          const schedule = this.state.schedule.concat(this.state.customBellTime)
+          if (inRange(date, schedule)) {
+            bellAudio.play();
+          }
+        }, 1000)
+      },
+      stopAudio() {
+        const bellAudio = this.$('audio')
+        bellAudio.pause()
+        bellAudio.currentTime = 0
+      },
+      togglePlayPause() {
+        const bellAudio = this.$('audio')
+        const paused = !this.state.paused
+        this.update({
+          paused
+        })
+        if (paused) {
+          bellAudio.play()
+        } else {
+          bellAudio.pause()
+        }
+      },
+    }
+
+  </script>
+</reminder-audio>
