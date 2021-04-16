@@ -4,7 +4,7 @@
       margin-top: 1rem;
     }
     .audio {
-      margin: 2rem 0;
+      margin: 1rem 0;
     }
     .center {
       text-align: center;
@@ -43,38 +43,42 @@
       </audio>
       <button class="stop button button-clear column column-10" onclick={stopAudio}>Stop</button>
     </div>
-  </div>
-  <div class="row">
-    <div class="column">
-      <p class="center full-date">{state.date}</p>
+  
+    <div class="row">
+      <select onchange={onAudioFileChange}>
+        <option each={f in state.audioFiles} value="{f.key}" selected={f.key === state.selectedAudio.key ? 'selected' : null}>{f.name}</option>
+      </select>
     </div>
-  </div>
 
-  <div class="row">
-    <select onchange={onAudioFileChange}>
-      <option each={f in state.audioFiles} value="{f.key}">{f.name}</option>
-    </select>
-  </div>
+    <div class="row">
+      <div class="column">
+        <p class="center full-date">{state.date}</p>
+      </div>
+    </div>
 
-  <div class="row">
+    <div class="row">
+      <button class="stop button button-clear column" 
     <button class="stop button button-clear column" 
-      onclick={onStopAudio}>
-      {state.bellTimeVisible ? 'Hide Bell Time' : 'Show Bell Time'}
-    </button>
-  </div>
-
-  <div if={state.bellTimeVisible} class="row center">
-    <div class="column">
-      <h3>Bell Time</h3>
-      <ul>
-        <li>Custom</li>
-        <li>
-          <input type="text" maxlength="8" value={state.customBellTime} autofocus
-            onkeyup={onCustomBellTimeInput}/>
-        </li>
-        <li each={s in state.schedule}>{s}</li>
-      </ul>
+      <button class="stop button button-clear column" 
+        onclick={onStopAudio}>
+        {state.bellTimeVisible ? 'Hide Bell Time' : 'Show Bell Time'}
+      </button>
     </div>
+
+    <div if={state.bellTimeVisible} class="row center">
+      <div class="column">
+        <h3>Bell Time</h3>
+        <ul>
+          <li>Custom</li>
+          <li>
+            <input type="text" maxlength="8" value={state.customBellTime} autofocus
+              onkeyup={onCustomBellTimeInput}/>
+          </li>
+          <li each={s in state.schedule}>{s}</li>
+        </ul>
+      </div>
+    </div>
+
   </div>
  
   <script>
@@ -177,8 +181,10 @@
         console.log(selectedAudio)
         this.update({ selectedAudio })
         saveItem({ name: 'selectedAudio', value: selectedAudio, type: 'json' })
+        $audio.pause()
+        $audio.currentTime = 0
         $audio.load()
-  },
+      },
       onCustomBellTimeInput (e) {
         const customBellTime = e.target.value.replace(/[^0-9:]/g, '')
         saveItem({ name: 'customBellTime', value: customBellTime, type: 'string' })
