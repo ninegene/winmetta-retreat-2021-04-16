@@ -37,8 +37,8 @@
 
     <div class="audio row">
       <audio controls class="column column-90">
-        <source src="assets/audio/bell.ogg" type="audio/ogg">
-        <source src="assets/audio/bell.mp3" type="audio/mpeg">
+        <source if={state.selectedAudio.ogg} src="assets/audio/{state.selectedAudio.ogg}" type="audio/ogg">
+        <source src="assets/audio/{state.selectedAudio.mp3}" type="audio/mpeg">
         Your browser does not support the audio element.
       </audio>
       <button class="stop button button-clear column column-10" onclick={stopAudio}>Stop</button>
@@ -51,24 +51,26 @@
   </div>
 
   <div class="row">
+    <select onchange={onAudioFileChange}>
+      <option each={f in state.audioFiles} value="{f.key}">{f.name}</option>
+    </select>
+  </div>
+
+  <div class="row">
     <button class="stop button button-clear column" 
-      onclick={() => update({bellTimeVisible: !state.bellTimeVisible})}>
+      onclick={onStopAudio}>
       {state.bellTimeVisible ? 'Hide Bell Time' : 'Show Bell Time'}
     </button>
   </div>
 
-  <div if={state.bellTimeVisible} class="row">
-    <div class="column center">
+  <div if={state.bellTimeVisible} class="row center">
+    <div class="column">
       <h3>Bell Time</h3>
       <ul>
         <li>Custom</li>
         <li>
-          <input type="text" value={state.customBellTime} autofocus
-            onkeyup={e => {
-              const customBellTime = e.target.value
-              window.localStorage.setItem('customBellTime', customBellTime)
-              this.update({customBellTime})
-            }}/>
+          <input type="text" maxlength="8" value={state.customBellTime} autofocus
+            onkeyup={onCustomBellTimeInput}/>
         </li>
         <li each={s in state.schedule}>{s}</li>
       </ul>
@@ -101,6 +103,22 @@
       return false
     }
 
+    function saveItem({name, value, type}) {
+      if (value && type === 'json') {
+        window.localStorage.setItem(name, JSON.stringify(value))
+      } else {
+        window.localStorage.setItem(name, value)
+      }
+    }
+
+    function getSavedItem({name, type}) {
+      const value = window.localStorage.getItem(name)
+      if (value && type === 'json') {
+        return JSON.parse(value)
+      }
+      return value;
+    }
+
     export default {
       components: {
       },
@@ -118,42 +136,68 @@
           '18:00:00',
         ],
         bellTimeVisible: true,
-        customBellTime: window.localStorage.getItem('customBellTime'),
+        customBellTime: getSavedItem({name: 'customBellTime', type: 'string'}),
+        audioFiles: [
+          {key: 'imc_timer', name: 'Mediation Timer from insightmeditationcenter.org', mp3: 'imc_timer.mp3', ogg: 'imc_timer.ogg'},
+          {key: 'omt_chime', name: 'Chime from onlinemeditationtimer.com', mp3: 'omt_chime.mp3', ogg: 'omt_chime.ogg'},
+          {key: 'bells-tibetan-daniel_simon', name: 'Bells Tibetan Large by Daniel Simon', mp3: 'bells-tibetan-daniel_simon.mp3', ogg: ''},
+        ],
+        selectedAudio: getSavedItem({name: 'selectedAudio', type: 'json'}) ||
+          {key: 'omt_chime', name: 'Chime from onlinemeditationtimer.com', mp3: 'omt_chime.mp3', ogg: 'omt_chime.ogg'},
       },
       onMounted() {
-        const bellAudio = this.$('audio');
-        bellAudio.addEventListener("pause", () => {
+        const $audio = this.$('audio');
+        $audio.addEventListener("pause", () => {
           // console.log('pause event', this)
-          // bellAudio.currentTime = 0
+          // audio.currentTime = 0
         })
-        bellAudio.addEventListener("ended", () => {
+        $audio.addEventListener("ended", () => {
           console.log('ended event')
-          bellAudio.currentTime = 0
+          $audio.currentTime = 0
         })
         setInterval(() => {
           const date = new Date();
           this.update({date})
           const schedule = this.state.schedule.concat(this.state.customBellTime)
           if (inRange(date, schedule)) {
-            bellAudio.play();
+            audio.play();
           }
         }, 1000)
       },
       stopAudio() {
-        const bellAudio = this.$('audio')
-        bellAudio.pause()
-        bellAudio.currentTime = 0
+        const $audio = this.$('audio')
+        $audio.pause()
+        $audio.currentTime = 0
+      },
+      onStopAudio() {
+        this.update({bellTimeVisible: !this.state.bellTimeVisible})
+      },
+      onAudioFileChange(e) {
+        // console.log(e);
+        const selectedKey = e.target.value
+        const selectedAudio = this.state.audioFiles.find(a => a.key === selectedKey)
+        const $audio = this.$('audio')
+
+        console.log(selectedAudio)
+        this.update({selectedAudio})
+        saveItem({name: 'selectedAudio', value: selectedAudio, type: 'json'})
+        $audio.load();
+      },
+      onCustomBellTimeInput(e) {
+        const customBellTime = e.target.value.replace(/[^0-9:]/g, '')
+        saveItem({name: 'customBellTime', value: customBellTime, type: 'string'})
+        this.update({customBellTime})
       },
       togglePlayPause() {
-        const bellAudio = this.$('audio')
+        const $audio = this.$('audio')
         const paused = !this.state.paused
         this.update({
           paused
         })
         if (paused) {
-          bellAudio.play()
+          $audio.play()
         } else {
-          bellAudio.pause()
+          $audio.pause()
         }
       },
     }

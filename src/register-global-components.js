@@ -1,7 +1,7 @@
 import { register } from 'riot'
-import MyComponent from './components/global/my-component/my-component.riot'
-import Sidebar from './components/global/sidebar/sidebar.riot'
-import ReminderAudio from './components/global/reminder-audio/reminder-audio.riot'
+import MyComponent from './components/global/my-component/my-component.html'
+import Sidebar from './components/global/sidebar/sidebar.html'
+import ReminderAudio from './components/global/reminder-audio/reminder-audio.html'
 
 // Rollup can not generate this object automatically via require.context :(
 const componentsRegistry = {
