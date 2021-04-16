@@ -1,5 +1,8 @@
 <reminder-audio>
   <style>
+    div:first-child {
+      padding: 1rem;
+    }
     .stop.button {
       margin-top: 1rem;
     }
@@ -21,10 +24,6 @@
   </style>
 
   <div>
-    <div class="row">
-      <h1>{state.date.toLocaleString()}</h1>
-    </div>
-
     <!--
     <div class="row">
       <button onclick={togglePlayPause}>Toggle Play/Pause</button>
@@ -32,11 +31,14 @@
     -->
 
     <div class="row">
-      <img src="/assets/images/2021-04-16-retreat-schedule.png"></img>
+      <div class="column center">
+        <h1>{state.date.toLocaleString()}</h1>
+        <img src="/assets/images/2021-04-16-retreat-schedule.png"/>
+      </div>
     </div>
 
     <div class="audio row">
-      <audio controls class="column column-90">
+      <audio controls class="column column-50 column-offset-20">
         <source if={state.selectedAudio.ogg} src="assets/audio/{state.selectedAudio.ogg}" type="audio/ogg">
         <source src="assets/audio/{state.selectedAudio.mp3}" type="audio/mpeg">
         Your browser does not support the audio element.
@@ -44,15 +46,18 @@
       <button class="stop button button-clear column column-10" onclick={stopAudio}>Stop</button>
     </div>
   
-    <div class="row">
-      <select onchange={onAudioFileChange}>
-        <option each={f in state.audioFiles} value="{f.key}" selected={f.key === state.selectedAudio.key ? 'selected' : null}>{f.name}</option>
-      </select>
-    </div>
 
     <div class="row">
-      <div class="column">
-        <p class="center full-date">{state.date}</p>
+      <div class="column column-40 column-offset-25">
+        <select onchange={onAudioFileChange}>
+          <option each={f in state.audioFiles} value="{f.key}" selected={f.key === state.selectedAudio.key ? 'selected' : null}>{f.name}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row center">
+      <div class="column column-80 column-offset-10">
+        <h3 class="center full-date">{state.date}</h3>
       </div>
     </div>
 
