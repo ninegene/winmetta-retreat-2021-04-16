@@ -78,20 +78,16 @@
   </div>
  
   <script>
-
-    function inRange(date, schedule) {
+    function inRange (date, schedule) {
       const hh = date.getHours()
       const mm = date.getMinutes()
       const ss = date.getSeconds()
 
       for (let s of schedule) {
-        if (!/:/.test(s))
-          continue
+        if (!/:/.test(s)) { continue }
         s = s.split(':')
-        if (s.length < 2) 
-          continue
-        if (s.length === 2)
-          s.push(0)
+        if (s.length < 2) { continue }
+        if (s.length === 2) { s.push(0) }
         const s_hh = Number(s[0])
         const s_mm = Number(s[1])
         const s_ss = Number(s[2])
@@ -103,7 +99,7 @@
       return false
     }
 
-    function saveItem({name, value, type}) {
+    function saveItem ({ name, value, type }) {
       if (value && type === 'json') {
         window.localStorage.setItem(name, JSON.stringify(value))
       } else {
@@ -111,13 +107,13 @@
       }
     }
 
-    function getSavedItem({name, type}) {
+    function getSavedItem ({ name, type }) {
       const value = window.localStorage.getItem(name)
       if (value && type === 'json') {
         return JSON.parse(value)
       }
-      return value;
-    }
+      return value
+}
 
     export default {
       components: {
@@ -133,62 +129,62 @@
           '15:00:00',
           '16:00:00',
           '17:00:00',
-          '18:00:00',
+          '18:00:00'
         ],
         bellTimeVisible: true,
-        customBellTime: getSavedItem({name: 'customBellTime', type: 'string'}),
+        customBellTime: getSavedItem({ name: 'customBellTime', type: 'string' }),
         audioFiles: [
-          {key: 'imc_timer', name: 'Mediation Timer from insightmeditationcenter.org', mp3: 'imc_timer.mp3', ogg: 'imc_timer.ogg'},
-          {key: 'omt_chime', name: 'Chime from onlinemeditationtimer.com', mp3: 'omt_chime.mp3', ogg: 'omt_chime.ogg'},
-          {key: 'bells-tibetan-daniel_simon', name: 'Bells Tibetan Large by Daniel Simon', mp3: 'bells-tibetan-daniel_simon.mp3', ogg: ''},
+          { key: 'imc_timer', name: 'Mediation Timer from insightmeditationcenter.org', mp3: 'imc_timer.mp3', ogg: 'imc_timer.ogg' },
+          { key: 'omt_chime', name: 'Chime from onlinemeditationtimer.com', mp3: 'omt_chime.mp3', ogg: 'omt_chime.ogg' },
+          { key: 'bells-tibetan-daniel_simon', name: 'Bells Tibetan Large by Daniel Simon', mp3: 'bells-tibetan-daniel_simon.mp3', ogg: '' }
         ],
-        selectedAudio: getSavedItem({name: 'selectedAudio', type: 'json'}) ||
-          {key: 'omt_chime', name: 'Chime from onlinemeditationtimer.com', mp3: 'omt_chime.mp3', ogg: 'omt_chime.ogg'},
+        selectedAudio: getSavedItem({ name: 'selectedAudio', type: 'json' }) ||
+          { key: 'omt_chime', name: 'Chime from onlinemeditationtimer.com', mp3: 'omt_chime.mp3', ogg: 'omt_chime.ogg' }
       },
-      onMounted() {
-        const $audio = this.$('audio');
-        $audio.addEventListener("pause", () => {
+      onMounted () {
+        const $audio = this.$('audio')
+    $audio.addEventListener('pause', () => {
           // console.log('pause event', this)
           // audio.currentTime = 0
         })
-        $audio.addEventListener("ended", () => {
+        $audio.addEventListener('ended', () => {
           console.log('ended event')
           $audio.currentTime = 0
         })
         setInterval(() => {
-          const date = new Date();
-          this.update({date})
+          const date = new Date()
+          this.update({ date })
           const schedule = this.state.schedule.concat(this.state.customBellTime)
           if (inRange(date, schedule)) {
-            audio.play();
+            audio.play()
           }
         }, 1000)
       },
-      stopAudio() {
+      stopAudio () {
         const $audio = this.$('audio')
         $audio.pause()
         $audio.currentTime = 0
       },
-      onStopAudio() {
-        this.update({bellTimeVisible: !this.state.bellTimeVisible})
+      onStopAudio () {
+        this.update({ bellTimeVisible: !this.state.bellTimeVisible })
       },
-      onAudioFileChange(e) {
+      onAudioFileChange (e) {
         // console.log(e);
         const selectedKey = e.target.value
         const selectedAudio = this.state.audioFiles.find(a => a.key === selectedKey)
         const $audio = this.$('audio')
 
         console.log(selectedAudio)
-        this.update({selectedAudio})
-        saveItem({name: 'selectedAudio', value: selectedAudio, type: 'json'})
-        $audio.load();
-      },
-      onCustomBellTimeInput(e) {
+        this.update({ selectedAudio })
+        saveItem({ name: 'selectedAudio', value: selectedAudio, type: 'json' })
+        $audio.load()
+  },
+      onCustomBellTimeInput (e) {
         const customBellTime = e.target.value.replace(/[^0-9:]/g, '')
-        saveItem({name: 'customBellTime', value: customBellTime, type: 'string'})
-        this.update({customBellTime})
+        saveItem({ name: 'customBellTime', value: customBellTime, type: 'string' })
+        this.update({ customBellTime })
       },
-      togglePlayPause() {
+      togglePlayPause () {
         const $audio = this.$('audio')
         const paused = !this.state.paused
         this.update({
@@ -199,8 +195,7 @@
         } else {
           $audio.pause()
         }
-      },
+      }
     }
-
   </script>
 </reminder-audio>

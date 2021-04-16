@@ -10,7 +10,8 @@
         "build": "rollup -c",
         "prepublishOnly": "npm test",
         "start": "npm run watch & npm run server",
-        "lint": "eslint src/",
+        "lint": "eslint --ext .js,.riot src/",
+        "lint-fix": "eslint --ext .js,.riot --fix src/",
         "watch": "rollup -c -w 'src/**'",
         "server": "browser-sync start --files 'dist/*, style.css, index.html' --server"
     },
@@ -36,7 +37,6 @@
         "mocha": "^8.2.1",
         "nyc": "^15.1.0",
         "rollup": "^2.33.3",
-        "rollup-plugin-eslint": "^7.0.0",
         "rollup-plugin-riot": "^5.0.0"
     },
     "dependencies": {

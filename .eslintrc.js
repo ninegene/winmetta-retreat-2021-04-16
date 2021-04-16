@@ -11,8 +11,12 @@ module.exports = {
     sourceType: 'module'
   },
   plugins: [
-    'riot'
+    'riot',
+    'html'
   ],
+  settings: {
+    "html/html-extensions": [".html", ".riot"],  // consider .html and .riot files as HTML
+  },
   rules: {
   }
 }
