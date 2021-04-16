@@ -88,11 +88,11 @@
         s = s.split(':')
         if (s.length < 2) { continue }
         if (s.length === 2) { s.push(0) }
-        const s_hh = Number(s[0])
-        const s_mm = Number(s[1])
-        const s_ss = Number(s[2])
-        // console.log(s_hh, s_mm, s_ss, '', hh, mm, ss)
-        if (hh === s_hh && mm === s_mm && ss === s_ss) {
+        const hh2 = Number(s[0])
+        const mm2 = Number(s[1])
+        const ss2 = Number(s[2])
+        // console.log(hh2, mm2, ss2, '', hh, mm, ss)
+        if (hh === hh2 && mm === mm2 && ss === ss2) {
           return true
         }
       }
@@ -143,7 +143,7 @@
       },
       onMounted () {
         const $audio = this.$('audio')
-    $audio.addEventListener('pause', () => {
+        $audio.addEventListener('pause', () => {
           // console.log('pause event', this)
           // audio.currentTime = 0
         })
@@ -156,7 +156,7 @@
           this.update({ date })
           const schedule = this.state.schedule.concat(this.state.customBellTime)
           if (inRange(date, schedule)) {
-            audio.play()
+            $audio.play()
           }
         }, 1000)
       },

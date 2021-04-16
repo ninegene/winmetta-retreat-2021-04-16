@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import MyComponent from './my-component.riot'
 import { expect } from 'chai'
 import { component } from 'riot'

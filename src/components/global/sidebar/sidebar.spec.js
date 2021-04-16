@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import Sidebar from './sidebar.riot'
 import { expect } from 'chai'
 import { component } from 'riot'
