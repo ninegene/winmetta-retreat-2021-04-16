@@ -142,12 +142,13 @@
         bellTimeVisible: true,
         customBellTime: getSavedItem({ name: 'customBellTime', type: 'string' }),
         audioFiles: [
+          { key: 'WinMetta_Meditation_Timer', name: 'WinMetta Meditation Timer', mp3: 'WinMetta_Meditation_Timer.mp3', ogg: '' },
           { key: 'imc_timer', name: 'Mediation Timer from insightmeditationcenter.org', mp3: 'imc_timer.mp3', ogg: 'imc_timer.ogg' },
           { key: 'omt_chime', name: 'Chime from onlinemeditationtimer.com', mp3: 'omt_chime.mp3', ogg: 'omt_chime.ogg' },
           { key: 'bells-tibetan-daniel_simon', name: 'Bells Tibetan Large by Daniel Simon', mp3: 'bells-tibetan-daniel_simon.mp3', ogg: '' }
         ],
         selectedAudio: getSavedItem({ name: 'selectedAudio', type: 'json' }) ||
-          { key: 'omt_chime', name: 'Chime from onlinemeditationtimer.com', mp3: 'omt_chime.mp3', ogg: 'omt_chime.ogg' }
+          { key: 'WinMetta_Meditation_Timer', name: 'WinMetta Meditation Timer', mp3: 'WinMetta_Meditation_Timer.mp3', ogg: '' }
       },
       onMounted () {
         const $audio = this.$('audio')
