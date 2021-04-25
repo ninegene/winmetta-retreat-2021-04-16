@@ -99,7 +99,7 @@
         const hh2 = Number(s[0])
         const mm2 = Number(s[1])
         const ss2 = Number(s[2])
-        if (hh === hh2 && mm === mm2 && ss === ss2) {
+        if (hh === hh2 && mm === mm2 && (ss === ss2 || ss + 1 === ss2)) {
           console.log('----------------', hh2, mm2, ss2, '', hh, mm, ss)
           return true
         }
@@ -139,7 +139,7 @@
       for (let j = 0; j <= 59; j++) {
         const m = j < 10 ? '0' + j : j
         schedule.push(`${i}:${m}:00`)
-        schedule.push(`${i}:${m}:30`)
+        // schedule.push(`${i}:${m}:30`)
       }
     }
 
@@ -173,11 +173,11 @@
         })
         setInterval(() => {
           const date = new Date()
-          this.update({ date })
           const schedule = this.state.schedule.concat(this.state.customBellTime)
           if (inRange(date, schedule)) {
             $audio.play()
           }
+          this.update({ date })
         }, 1000)
       },
       stopAudio () {
