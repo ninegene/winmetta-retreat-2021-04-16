@@ -90,6 +90,7 @@
       const mm = date.getMinutes()
       const ss = date.getSeconds()
 
+      console.log(hh, mm, ss)
       for (let s of schedule) {
         if (!/:/.test(s)) { continue }
         s = s.split(':')
@@ -98,8 +99,8 @@
         const hh2 = Number(s[0])
         const mm2 = Number(s[1])
         const ss2 = Number(s[2])
-        // console.log(hh2, mm2, ss2, '', hh, mm, ss)
         if (hh === hh2 && mm === mm2 && ss === ss2) {
+          console.log('----------------', hh2, mm2, ss2, '', hh, mm, ss)
           return true
         }
       }
@@ -122,23 +123,33 @@
       return value
     }
 
+    const schedule = [
+      '09:00:00',
+      '10:00:00',
+      '10:30:00',
+      '13:00:00',
+      '14:00:00',
+      '15:00:00',
+      '16:00:00',
+      '17:00:00',
+      '18:00:00'
+    ]
+
+    for (let i = 19; i <= 23; i++) {
+      for (let j = 0; j <= 59; j++) {
+        const m = j < 10 ? '0' + j : j
+        schedule.push(`${i}:${m}:00`)
+        schedule.push(`${i}:${m}:30`)
+      }
+    }
+
     export default {
       components: {
       },
       state: {
         paused: false,
         date: new Date(),
-        schedule: [
-          '09:00:00',
-          '10:00:00',
-          '10:30:00',
-          '13:00:00',
-          '14:00:00',
-          '15:00:00',
-          '16:00:00',
-          '17:00:00',
-          '18:00:00'
-        ],
+        schedule: schedule,
         bellTimeVisible: true,
         customBellTime: getSavedItem({ name: 'customBellTime', type: 'string' }),
         audioFiles: [
