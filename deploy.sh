@@ -1,4 +1,4 @@
 #!/bin/bash
 set -ex
 
-rsync -azhv ./ winmetta:~/htdocs/retreat.winmetta.org/
+rsync -azhv --exclude=".DS_Store" ./ winmetta:~/htdocs/retreat.winmetta.org/
