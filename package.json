@@ -7,7 +7,7 @@
         "test": "nyc --require esm --require jsdom-global/register --require @riotjs/register mocha src/**/*.spec.js",
         "cov": "nyc report --reporter=text-lcov | coveralls",
         "cov-html": "nyc report --reporter=html",
-        "build": "npm run lint & rollup -c",
+        "build": "npm run lint && rollup -c",
         "prepublishOnly": "npm test",
         "start": "npm run watch & npm run server",
         "lint": "eslint --ext .js,.riot src/",
