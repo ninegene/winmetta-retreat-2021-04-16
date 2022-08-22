@@ -1,4 +1,4 @@
-<reminder-audio>
+<reminder-audio-2>
   <style>
     div:first-child {
       padding: 1rem;
@@ -24,7 +24,7 @@
   </style>
 
   <div>
-    <retreat-links-header selectedTab={1}></restreat-links-header>
+    <retreat-links-header selectedTab={2}></restreat-links-header>    
 
     <!--
     <div class="row">
@@ -35,7 +35,7 @@
     <div class="row">
       <div class="column center">
         <h1>{state.date.toLocaleString()}</h1>
-        <img width="800px" src="/assets/images/retreat1/schedule.jpg"/>
+        <img width="800px" src="/assets/images/retreat2/schedule.jpg"/>
       </div>
     </div> 
 
@@ -127,15 +127,30 @@
       return value
     }
 
+/*
+ am
+8:55 am
+10 am
+11 am
+12:30 pm
+12:55 pm
+2 pm
+2:55 pm
+4 pm
+4:44 pm
+5:55 pm
+*/
     const schedule = [
-      '06:00:00',
-      '09:00:00',
+      '08:55:00',
       '10:00:00',
-      '10:30:00',
-      '13:00:00',
+      '11:00:00',
+      '12:30:00',
+      '12:55:00',
       '14:00:00',
-      '15:30:00',
-      '16:30:00'
+      '14:55:00',
+      '16:00:00',
+      '16:44:00',
+      '17:55:00'
     ]
 
     // for (let i = 19; i <= 23; i++) {
@@ -224,4 +239,4 @@
       }
     }
   </script>
-</reminder-audio>
+</reminder-audio-2>
