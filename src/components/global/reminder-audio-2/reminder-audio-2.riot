@@ -21,6 +21,13 @@
     li input[type=text] {
       width: 8.5rem;
     }
+    p.current-date {
+      padding-bottom: 0;
+      margin-bottom: 0;
+      line-height: 0.8;
+      font-size: 2em;
+      font-weight: bold;
+    }
   </style>
 
   <div>
@@ -34,9 +41,7 @@
 
     <div class="row">
       <div class="column center">
-        <h1>{state.date.toLocaleString()}</h1>
-        <br/>
-        <br/>
+        <p class="current-date">{state.date.toLocaleString()}</p>
         <img width="800px" src="/assets/images/retreat2/schedule.jpg"/>
       </div>
     </div> 
